@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import AdminRegister from './pages/AdminRegister';
+import AdminPainel from './pages/AdminPainel';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/login" element={<Login />} />
         <Route path="/admin/register" element={<AdminRegister />} />
+        <Route path="/admin/painel" element={<AdminPainel />} />
       </Routes>
     </Router>
   );

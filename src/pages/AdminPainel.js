@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
+import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 
 function AdminPainel() {
   const [usuarios, setUsuarios] = useState([]);
@@ -15,10 +15,10 @@ function AdminPainel() {
     setUsuarios(lista);
   };
 
-  const promoverParaAdmin = async (id) => {
-    const ref = doc(db, 'usuarios', id);
+  const promoverParaAdmin = async (uid) => {
+    const ref = doc(db, 'usuarios', uid);
     await updateDoc(ref, { tipo: 'admin' });
-    carregarUsuarios(); // atualiza a lista
+    carregarUsuarios(); // atualizar a lista
   };
 
   useEffect(() => {
