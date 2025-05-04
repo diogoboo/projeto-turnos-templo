@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
-import { auth } from '../services/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../services/firebase';
+import { setDoc, doc } from 'firebase/firestore';
 
 function AdminRegister() {
   const [email, setEmail] = useState('');
@@ -11,8 +12,16 @@ function AdminRegister() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, senha);
+      const credenciais = await createUserWithEmailAndPassword(auth, email, senha);
+      await setDoc(doc(db, 'usuarios', credenciais.user.uid), {
+        uid: credenciais.user.uid,
+        email: email,
+        tipo: 'voluntario',
+        criado_em: new Date().toISOString()
+      });
       setMensagem('Usuário criado com sucesso!');
+      setEmail('');
+      setSenha('');
     } catch (error) {
       setMensagem('Erro ao criar usuário: ' + error.message);
     }
@@ -20,19 +29,15 @@ function AdminRegister() {
 
   return (
     <div style={{ maxWidth: '400px', margin: '50px auto' }}>
-      <h2>Criar novo usuário</h2>
+      <h2>Cadastrar Novo Usuário</h2>
       <form onSubmit={handleRegister}>
-        <div>
-          <label>Email:</label><br />
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
-        </div>
-        <div>
-          <label>Senha:</label><br />
-          <input type="password" value={senha} onChange={e => setSenha(e.target.value)} required />
-        </div>
+        <label>Email:</label><br />
+        <input type="email" value={email} onChange={e => setEmail(e.target.value)} required /><br />
+        <label>Senha:</label><br />
+        <input type="password" value={senha} onChange={e => setSenha(e.target.value)} required /><br />
         <button type="submit">Criar</button>
-        {mensagem && <p>{mensagem}</p>}
       </form>
+      {mensagem && <p>{mensagem}</p>}
     </div>
   );
 }
